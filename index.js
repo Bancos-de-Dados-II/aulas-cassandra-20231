@@ -35,10 +35,10 @@ async function listar(){
     await client.shutdown();
 }
 
-atualizar({
-    email:'joao@gmail.com',
-    nome: 'João da Silva'
-});
+// atualizar({
+//     email:'joao@gmail.com',
+//     nome: 'João da Silva'
+// });
 
 async function atualizar(usuario){
     await client.connect();
@@ -46,6 +46,16 @@ async function atualizar(usuario){
     await client.execute('UPDATE usuario SET nome=? WHERE email=?',[usuario.nome, usuario.email], {prepare: true}).then(result=>{
         console.log('Atualizado');
     });
+
+    await client.shutdown();
+}
+
+deletar('joao@gmail.com');
+
+async function deletar(email){
+    await client.connect();
+
+    await client.execute('DELETE FROM usuario WHERE email=?',[email],{prepare:true}).then(result => console.log('Removido'));
 
     await client.shutdown();
 }
