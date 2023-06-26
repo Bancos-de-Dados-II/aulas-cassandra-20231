@@ -23,13 +23,28 @@ async function salvar(usuario){
     await client.shutdown();
 }
 
-listar();
+// listar();
 
 async function listar(){
     await client.connect();
 
     await client.execute('SELECT JSON * FROM usuario').then(result =>{
         result.rows.forEach(r => console.log(r['[json]']));
+    });
+
+    await client.shutdown();
+}
+
+atualizar({
+    email:'joao@gmail.com',
+    nome: 'João da Silva'
+});
+
+async function atualizar(usuario){
+    await client.connect();
+
+    await client.execute('UPDATE usuario SET nome=? WHERE email=?',[usuario.nome, usuario.email], {prepare: true}).then(result=>{
+        console.log('Atualizado');
     });
 
     await client.shutdown();
